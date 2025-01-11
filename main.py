@@ -30,22 +30,11 @@ def check_diary_entry():
     if response.status_code == 200:
         results = response.json()["results"]
         
-        # Check if an entry with today's date exists
-        for page in results:
-            # Assuming the date property is named "Date" or similar
-            if "properties" in page and "Date" in page["properties"]:
-                date_property = page["properties"]["Date"]
-                if date_property["date"]:
-                    entry_date = date_property["date"]["start"]
-                    if entry_date.startswith(today_date):
-                        # Check if the diary content is filled
-                        if "properties" in page and "Content" in page["properties"]:
-                            content_property = page["properties"]["Content"]
-                            if content_property.get("rich_text"):
-                                content = content_property["rich_text"]
-                                if content:  # If content is not empty
-                                    print("Your diary is filled for today.")
-                                    return
+        # If title is not "${date} 日記", means it have been filled
+        title = "${date} 日記"
+        if(results[0]["properties"]["標題"]["title"][0]["text"]["content"]) != title:
+          print("Your diary is filled for today.")
+          return
         print("No diary entry found for today or it's empty.")
     else:
         print(f"Error: {response.status_code}, {response.text}")
