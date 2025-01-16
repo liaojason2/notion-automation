@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 import telegram
 from telegram.error import TelegramError
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-
 # Load environment variables
 load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
