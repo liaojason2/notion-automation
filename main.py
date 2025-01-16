@@ -1,4 +1,4 @@
-from src import check_diary_status, telegram_bots
+from src import check_diary_status, telegram_bot
 import functions_framework
 
 @functions_framework.http
