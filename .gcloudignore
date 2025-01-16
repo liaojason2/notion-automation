@@ -12,5 +12,7 @@
 # below:
 .git
 .gitignore
+.env
+env.yaml
 
 node_modules
