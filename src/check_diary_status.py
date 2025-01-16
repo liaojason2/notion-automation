@@ -3,7 +3,6 @@ import datetime
 import os
 import asyncio
 from dotenv import load_dotenv
-import functions_framework
 import src.telegram_bot as telegram_bot
 
 load_dotenv()
@@ -11,30 +10,47 @@ load_dotenv()
 NOTION_API_TOKEN = os.getenv("NOTION_API_TOKEN")
 DATABASE_ID = os.getenv("DATABASE_ID")
 
-# Notion API headers
-headers = {
+HEADERS = {
     "Authorization": f"Bearer {NOTION_API_TOKEN}",
     "Content-Type": "application/json",
-    "Notion-Version": "2022-06-28",  # Use the latest version
+    "Notion-Version": "2022-06-28",
 }
 
-# Function to get today's date in "YYYY-MM-DD" format
-def get_today_date():
+def get_today_date() -> str:
+    """Return today's date in YYYY-MM-DD format."""
     return datetime.datetime.now().strftime("%Y-%m-%d")
 
-def diary_check():
-    today_date = get_today_date()
+def fetch_notion_entries() -> list:
+    """
+    Query Notion database and return results list.
+    Raises an exception if request fails.
+    """
     query_url = f"https://api.notion.com/v1/databases/{DATABASE_ID}/query"
-    response = requests.post(query_url, headers=headers)
+    response = requests.post(query_url, headers=HEADERS)
+    response.raise_for_status()
+    return response.json().get("results", [])
 
-    if response.status_code == 200:
-        results = response.json()["results"]
-        title = "${date} 日記"
+def diary_check() -> str:
+    """
+    Check if today's diary entry exists in Notion.
+    Sends Telegram notification about result.
+    """
+    results = fetch_notion_entries()
+    if not results:
+        asyncio.run(telegram_bot.send_message(msg="No results found in Notion."))
+        return "No Notion entries."
 
-        if results[0]["properties"]["標題"]["title"][0]["text"]["content"] != title:
-            asyncio.run(telegram_bot.send_message(msg="Your diary is filled for today."))
-            return "Your diary is filled for today."
-        asyncio.run(telegram_bot.send_message(msg="No diary entry found for today or it's empty."))
-        return "No diary entry found for today or it's empty."
+    # Placeholder pattern for today's title
+    title_pattern = "${date} 日記"
+
+    # Extract current entry title
+    current_title = results[0]["properties"]["標題"]["title"][0]["text"]["content"]
+
+    if current_title != title_pattern:
+        msg = "Your diary is filled for today."
+        asyncio.run(telegram_bot.send_message(msg=msg))
+        return msg
     else:
-        return f"Error: {response.status_code}, {response.text}"
+        msg = "No diary entry found for today or it's empty."
+        asyncio.run(telegram_bot.send_message(msg=msg))
+        return msg
