@@ -4,7 +4,7 @@ import os
 import asyncio
 from dotenv import load_dotenv
 import functions_framework
-from telegrambot import send_message
+import src.telegram_bot as telegram_bot
 
 load_dotenv()
 
@@ -22,8 +22,7 @@ headers = {
 def get_today_date():
     return datetime.datetime.now().strftime("%Y-%m-%d")
 
-@functions_framework.http
-def diary_check(request):
+def diary_check():
     today_date = get_today_date()
     query_url = f"https://api.notion.com/v1/databases/{DATABASE_ID}/query"
     response = requests.post(query_url, headers=headers)
@@ -33,9 +32,9 @@ def diary_check(request):
         title = "${date} 日記"
 
         if results[0]["properties"]["標題"]["title"][0]["text"]["content"] != title:
-            asyncio.run(send_message(msg="Your diary is filled for today."))
+            asyncio.run(telegram_bot.send_message(msg="Your diary is filled for today."))
             return "Your diary is filled for today."
-        asyncio.run(send_message(msg="No diary entry found for today or it's empty."))
+        asyncio.run(telegram_bot.send_message(msg="No diary entry found for today or it's empty."))
         return "No diary entry found for today or it's empty."
     else:
         return f"Error: {response.status_code}, {response.text}"
