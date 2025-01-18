@@ -32,7 +32,7 @@ def fetch_notion_entries() -> list:
 
 def diary_check() -> str:
     """
-    Check if today's diary entry exists in Notion.
+    Check if today and yesterday's diary entry exists in Notion.
     Sends Telegram notification about result.
     """
     results = fetch_notion_entries()
@@ -51,9 +51,11 @@ def diary_check() -> str:
     message = ""
 
     if today_diary_title == title_pattern:
-        message += "你還沒有填今天的日記！\n" + today_diary_link + "\n"
+        message += "你還沒有填今天的日記！\n" + today_diary_link
+
+    message += "\n\n"
 
     if yesterday_diary_title == title_pattern:
-        message += "昨天的日記還沒有完成！\n" + yesterday_diary_link + "\n"
+        message += "昨天的日記還沒有完成！\n" + yesterday_diary_link
 
     return message
