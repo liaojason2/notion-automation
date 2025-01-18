@@ -46,9 +46,5 @@ def diary_check() -> str:
     current_title = results[0]["properties"]["標題"]["title"][0]["text"]["content"]
     current_link = results[0]["url"]
 
-    print(current_link)
-
     if current_title == title_pattern:
         return "你還沒有填今天的日記！\n" + current_link
-
-diary_check()
