@@ -24,7 +24,6 @@ jobs:
       with:
         version: 'latest'
         
-
     - name: Deploy to Google Cloud Function
       run: |
         gcloud functions deploy notion-automation \
