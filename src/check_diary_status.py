@@ -45,8 +45,13 @@ def diary_check() -> str:
 
     # Extract current entry title
     current_title = results[0]["properties"]["標題"]["title"][0]["text"]["content"]
+    current_link = results[0]["url"]
+
+    print(current_link)
 
     if current_title == title_pattern:
-        msg = "你還沒有填今天的日記！"
+        msg = "你還沒有填今天的日記！\n\n" + current_link
         asyncio.run(telegram_bot.send_message(msg=msg))
         return msg
+
+diary_check()
