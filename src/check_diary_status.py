@@ -43,8 +43,17 @@ def diary_check() -> str:
     title_pattern = "${date} 日記"
 
     # Extract current entry title
-    current_title = results[0]["properties"]["標題"]["title"][0]["text"]["content"]
-    current_link = results[0]["url"]
+    today_diary_title = results[0]["properties"]["標題"]["title"][0]["text"]["content"]
+    today_diary_link = results[0]["url"]
+    yesterday_diary_title = results[1]["properties"]["標題"]["title"][0]["text"]["content"]
+    yesterday_diary_link = results[1]["url"]
 
-    if current_title == title_pattern:
-        return "你還沒有填今天的日記！\n" + current_link
+    message = ""
+
+    if today_diary_title == title_pattern:
+        message += "你還沒有填今天的日記！\n" + today_diary_link + "\n"
+
+    if yesterday_diary_title == title_pattern:
+        message += "昨天的日記還沒有完成！\n" + yesterday_diary_link + "\n"
+
+    return message
