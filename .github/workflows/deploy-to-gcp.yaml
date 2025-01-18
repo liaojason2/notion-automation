@@ -23,9 +23,5 @@ jobs:
     - name: Deploy to Google Cloud Function
       run: |
         gcloud functions deploy notion-automation \
-          --gen2 \
           --runtime=python312 \
           --region=asia-east1 \
-          --source="." \
-          --entry-point=main \
-          --trigger-topic=notion-notify
