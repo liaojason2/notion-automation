@@ -37,8 +37,7 @@ def diary_check() -> str:
     """
     results = fetch_notion_entries()
     if not results:
-        asyncio.run(telegram_bot.send_message(msg="No results found in Notion."))
-        return "No Notion entries."
+        return "No results found in Notion."
 
     # Placeholder pattern for today's title
     title_pattern = "${date} 日記"
@@ -50,8 +49,6 @@ def diary_check() -> str:
     print(current_link)
 
     if current_title == title_pattern:
-        msg = "你還沒有填今天的日記！\n\n" + current_link
-        asyncio.run(telegram_bot.send_message(msg=msg))
-        return msg
+        return "你還沒有填今天的日記！\n" + current_link
 
 diary_check()
