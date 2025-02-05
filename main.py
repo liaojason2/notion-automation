@@ -1,4 +1,5 @@
-from src import check_diary_status, telegram_bot
+from notion_action import check_diary_status
+from telegram_bot_action import telegram_bot
 import asyncio
 import functions_framework
 

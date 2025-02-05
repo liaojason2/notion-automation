@@ -1,9 +1,7 @@
 import requests
 import datetime
 import os
-import asyncio
 from dotenv import load_dotenv
-import src.telegram_bot as telegram_bot
 
 load_dotenv()
 
