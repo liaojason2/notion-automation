@@ -14,5 +14,7 @@
 .gitignore
 .env
 env.yaml
+telegram_group_id.py
+test.py
 
 node_modules
