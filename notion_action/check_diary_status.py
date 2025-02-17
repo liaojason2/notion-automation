@@ -49,7 +49,7 @@ def diary_check() -> str:
     message = ""
 
     if today_diary_title == title_pattern:
-        message += "你還沒有填今天的日記！\n" + today_diary_link
+        message += "今天的日記還沒有完成喔 ⬇️\n" + today_diary_link
 
     message += "\n\n"
 
@@ -57,3 +57,4 @@ def diary_check() -> str:
         message += "昨天的日記還沒有完成！\n" + yesterday_diary_link
 
     return message
+   
